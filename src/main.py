@@ -20,12 +20,31 @@ def read_file(file_path):
         sys.exit(1)
     return data
 
+
 def get_all_dir(loc):
     parent_dir = loc  # The directory where subdirectories are located
     subdirs = [d for d in os.listdir(
         parent_dir) if os.path.isdir(os.path.join(parent_dir, d))]
 
     return subdirs
+
+
+def run_commands(cmd, dir):
+    for subdir in dir:
+        print(f"Processing directory {subdir}")
+        try:
+            os.chdir(os.path.join(LOCATION, subdir))
+            os.system("git pull")  # execute git pull command
+            env_file = f".env.{subdir}"
+            if os.path.exists(env_file):
+                os.system(f"cp {env_file} .env")  # execute copy command
+            # execute config:cache command
+            os.system("php artisan config:cache")
+            os.system("php artisan migrate --force")  # execute migrate command
+            print(f"Directory {subdir} successfully processed")
+        except Exception as e:
+            print(f"Error processing directory {subdir}: {e}")
+            continue
 
 
 if __name__ == '__main__':
