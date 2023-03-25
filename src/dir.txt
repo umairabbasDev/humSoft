@@ -1,0 +1,10 @@
+binaries
+data
+reports
+archive
+2022
+templates
+weekly
+networking
+truetype
+images
